@@ -1,3 +1,5 @@
+
+
 let noteTitle;
 let noteText;
 let saveNoteBtn;
