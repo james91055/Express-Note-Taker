@@ -24,13 +24,17 @@ app.get("/notes", (req, res) =>
 );
 
 // GET Route for notes page
-app.get("/api/notes", (req, res) => {
-  // Send a message to the client
-  res.json(`${req.method} request received to get notes`);
 
-  // Log our request to the terminal
-  console.info(`${req.method} request received to get notes`);
-  return res.json(JSON.parse(fs.readFileSync("./db/db.json")));
+app.route("/api/notes").get((req, res) => {
+  // Send a message to the client
+  fs.readFile("./db/db.json", (err, data) => {
+    if (err) {
+      console.error(err);
+    } else {
+      const parsedData = JSON.parse(data);
+      res.status(200).json(parsedData);
+    }
+  });
 });
 
 // POST request to add a notes
