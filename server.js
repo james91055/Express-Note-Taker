@@ -1,8 +1,10 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const { env } = require("process");
+// const { env } = require("process");
 const notesData = require("./db/db.json");
+
+const uuid = require("./helper/uuid");
 
 const PORT = process.env.PORT || 3001;
 
@@ -15,27 +17,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "public"));
 
 // GET Route for homepage
-app.get("/", (req, res) =>
-  res.sendFile(path.join(__dirname, "public/index.html"))
-);
+app.get("*", (req, res) => {
+  console.log(`${req.method} request received to index.html`);
+  res.sendFile(path.join(__dirname, "public/index.html"));
+});
 
-app.get("/notes", (req, res) =>
-  res.sendFile(path.join(__dirname, "public/notes.html"))
-);
+app.get("/notes", (req, res) => {
+  console.log(`${req.method} request received to notes.html`);
+  res.sendFile(path.join(__dirname, "public/notes.html"));
+});
 
 // GET Route for notes page
 
-app.route("/api/notes").get((req, res) => {
-  // Send a message to the client
-  fs.readFile("./db/db.json", (err, data) => {
-    if (err) {
-      console.error(err);
-    } else {
-      const parsedData = JSON.parse(data);
-      res.status(200).json(parsedData);
-    }
-  });
-});
+// app.route("/api/notes").get((req, res) => {
+//   // Send a message to the client
+//   fs.readFile("./db/db.json", (err, data) => {
+//     if (err) {
+//       console.error(err);
+//     } else {
+//       const parsedData = JSON.parse(data);
+//       res.status(200).json(parsedData);
+//     }
+//   });
+// });
 
 // POST request to add a notes
 app.post("/api/notes", (req, res) => {
